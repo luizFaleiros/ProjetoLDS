@@ -1,4 +1,4 @@
-package br.com.projeto.LDS.domain.entities;
+package br.com.projeto.LDS.domains.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
