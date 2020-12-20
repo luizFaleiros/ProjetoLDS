@@ -1,0 +1,37 @@
+package br.com.projeto.LDS.domains.entities;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import java.util.List;
+
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Table(name = "TCC")
+@ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class TCC extends BaseEntity {
+
+    private String name;
+
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Studant> studants;
+
+}

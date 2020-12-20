@@ -3,31 +3,34 @@ package br.com.projeto.LDS.domains.entities;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import java.io.Serializable;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Builder
 @Table(name = "PERSON")
-public class Person implements Serializable {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Person extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "NAME")
+    private String name;
 
-    private String nome;
+    @Column(name = "LAST_NAME")
+    private String lastName;
 
-    private String sobreNome;
-
+    @Column(name = "CPF")
     private String cpf;
 
 }

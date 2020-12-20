@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +21,15 @@ public class PersonController {
 
     private final PersonService personService;
 
-    @GetMapping("/getPessoa/{id}")
-    public ResponseEntity<Person> listar(@PathVariable Long id){
+    @GetMapping("/get-by-id/{id}")
+    public ResponseEntity<Person> list(@PathVariable Long id){
 
         return ResponseEntity.ok(personService.getById(id));
+    }
+
+    @PostMapping("/save-all")
+    public ResponseEntity<String> save(List<Person> personList){
+        personService.saveAll(personList);
+        return ResponseEntity.created(URI.create("Deu certo")).body("OK");
     }
 }
