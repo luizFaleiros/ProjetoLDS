@@ -1,5 +1,6 @@
 package br.com.projeto.LDS.domains.entities;
 
+import br.com.projeto.LDS.enums.PersonTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,5 +33,8 @@ public abstract class Person extends BaseEntity{
 
     @Column(name = "CPF")
     private String cpf;
+
+    @Column(name="PERSON_TYPE")
+    private PersonTypeEnum personType;
 
 }

@@ -31,7 +31,7 @@ public class TCC extends BaseEntity {
 
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "tcc")
     private List<Studant> studants;
 
 }

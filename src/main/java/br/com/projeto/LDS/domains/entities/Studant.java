@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -24,5 +25,9 @@ import javax.persistence.Table;
 public class Studant  extends Person{
 
     private String code;
+
+    @ManyToOne
+    @JoinColumn(name = "PK_STUDANT_TCC")
+    private TCC tcc;
 
 }
