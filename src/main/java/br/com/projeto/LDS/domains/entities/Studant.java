@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -17,10 +18,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "STUDANT")
 @ToString
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder(toBuilder = true)
 @Data
+@NoArgsConstructor
 @PrimaryKeyJoinColumn(name="PK_STUDANT_PERSON", referencedColumnName="ID")
 public class Studant  extends Person{
 

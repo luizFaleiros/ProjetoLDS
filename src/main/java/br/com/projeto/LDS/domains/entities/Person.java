@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +22,12 @@ import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "PERSON")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Getter
+@NoArgsConstructor
+@Setter
+@Builder
 public abstract class Person extends BaseEntity{
 
     @Column(name = "NAME")

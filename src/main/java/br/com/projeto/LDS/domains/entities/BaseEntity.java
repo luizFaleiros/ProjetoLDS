@@ -1,5 +1,10 @@
 package br.com.projeto.LDS.domains.entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +14,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @MappedSuperclass
+@Getter
+@Setter
+@NoArgsConstructor
+@SuperBuilder
 public abstract class BaseEntity implements Serializable {
 
     @Id

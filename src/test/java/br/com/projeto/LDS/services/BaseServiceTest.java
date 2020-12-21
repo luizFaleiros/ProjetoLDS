@@ -6,14 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 
-import static org.junit.Assert.*;
-
-public class PersonServiceTest {
+public class BaseServiceTest {
 
     @InjectMocks
-    private PersonService personService;
+    private BaseService baseService;
 
     @Mock
     private PersonRepository repository;
