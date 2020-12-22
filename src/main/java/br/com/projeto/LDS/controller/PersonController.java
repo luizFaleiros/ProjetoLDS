@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,5 +46,12 @@ public class PersonController {
     public ResponseEntity<List<Person>> list() {
 
         return ResponseEntity.ok(personService.listAll());
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Person> update(@RequestBody PersonDTO personDTO,
+                                         @PathVariable Long id) {
+
+        return ResponseEntity.ok(personService.update(personDTO,id));
     }
 }

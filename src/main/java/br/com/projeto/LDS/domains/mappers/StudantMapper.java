@@ -1,6 +1,7 @@
 package br.com.projeto.LDS.domains.mappers;
 
 import br.com.projeto.LDS.domains.DTO.StudantDTO;
+import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Studant;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
@@ -27,5 +28,11 @@ public class StudantMapper {
                 .name(dto.getFirstName())
                 .code(dto.getCode())
                 .build();
+    }
+
+    public Person updateEntity(Studant p, StudantDTO person) {
+        p.setCode(person.getCode());
+        p.setTcc(person.getTcc());
+        return p;
     }
 }

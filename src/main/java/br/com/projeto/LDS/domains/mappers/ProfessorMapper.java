@@ -1,6 +1,7 @@
 package br.com.projeto.LDS.domains.mappers;
 
 import br.com.projeto.LDS.domains.DTO.ProfessorDTO;
+import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Professor;
 import br.com.projeto.LDS.domains.entities.TCC;
 import org.apache.commons.collections4.ListUtils;
@@ -24,7 +25,6 @@ public class ProfessorMapper {
     }
 
     public Professor toEntity(ProfessorDTO dto) {
-        Set<TCC> tccs = new HashSet<>();
         return Professor.builder()
                 .tcc(ListUtils.emptyIfNull(dto.getTccs()).stream().collect(Collectors.toSet()))
                 .cpf(dto.getCpf())
@@ -32,5 +32,10 @@ public class ProfessorMapper {
                 .personType(dto.getPersonType())
                 .name(dto.getFirstName())
                 .build();
+    }
+
+    public Person updateEntity(Professor p, ProfessorDTO person) {
+        p.setTcc(ListUtils.emptyIfNull(person.getTccs()).stream().collect(Collectors.toSet()));
+        return p;
     }
 }
