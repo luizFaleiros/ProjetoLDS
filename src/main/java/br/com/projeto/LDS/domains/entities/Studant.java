@@ -19,6 +19,8 @@ import javax.persistence.Table;
 @Table(name = "STUDANT")
 @ToString
 @Data
+@SuperBuilder(toBuilder = true)
+@AllArgsConstructor
 @NoArgsConstructor
 @PrimaryKeyJoinColumn(name="PK_STUDANT_PERSON", referencedColumnName="ID")
 public class Studant  extends Person{

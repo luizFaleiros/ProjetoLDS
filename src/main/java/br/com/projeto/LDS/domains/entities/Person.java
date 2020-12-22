@@ -26,7 +26,9 @@ import java.io.Serializable;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
+@SuperBuilder(toBuilder = true)
 public abstract class Person extends BaseEntity{
 
     @Column(name = "NAME")
