@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@SuperBuilder
 public abstract class BaseEntity implements Serializable {
 
     @Id

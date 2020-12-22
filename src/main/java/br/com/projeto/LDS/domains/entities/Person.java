@@ -27,7 +27,6 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor
 @Setter
-@Builder
 public abstract class Person extends BaseEntity{
 
     @Column(name = "NAME")

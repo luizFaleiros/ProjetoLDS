@@ -24,7 +24,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Professor")
 @ToString
-@SuperBuilder(toBuilder = true)
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

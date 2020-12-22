@@ -24,10 +24,6 @@ public class ProfessorMapper {
     public Professor toEntity(ProfessorDTO dto) {
         return Professor.builder()
                 .tcc(new HashSet<>(dto.getTccs()))
-                .name(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .cpf(dto.getCpf())
-                .personType(dto.getPersonType())
                 .build();
     }
 }

@@ -18,7 +18,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "STUDANT")
 @ToString
-@SuperBuilder(toBuilder = true)
 @Data
 @NoArgsConstructor
 @PrimaryKeyJoinColumn(name="PK_STUDANT_PERSON", referencedColumnName="ID")
