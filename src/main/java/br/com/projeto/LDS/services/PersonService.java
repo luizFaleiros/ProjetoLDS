@@ -12,6 +12,7 @@ import br.com.projeto.LDS.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -47,6 +48,8 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         }else {
             throw new IllegalArgumentException();
         }
+        p.setCreatedDate(LocalDate.now());
+        p.setModifiedDate(LocalDate.now());
         personRepository.save(p);
     }
 }
