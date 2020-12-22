@@ -19,5 +19,8 @@ public class StudantDTO extends PersonDTO {
     public StudantDTO() {
         super(PersonTypeEnum.STUDANT);
     }
-    TCC tcc;
+
+    private TCC tcc;
+
+    private String code;
 }

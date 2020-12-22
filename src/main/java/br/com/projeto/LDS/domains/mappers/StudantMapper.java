@@ -20,6 +20,12 @@ public class StudantMapper {
     }
 
     public Studant toEntity(StudantDTO dto){
-        return new Studant();
+        return Studant.builder()
+                .tcc(dto.getTcc())
+                .cpf(dto.getCpf())
+                .lastName(dto.getLastName())
+                .name(dto.getFirstName())
+                .code(dto.getCode())
+                .build();
     }
 }
