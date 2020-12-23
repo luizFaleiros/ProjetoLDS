@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "personType")
 @JsonSubTypes({@JsonSubTypes.Type(value = ProfessorDTO.class, name = "PROFESSOR"), @JsonSubTypes.Type(value = StudantDTO.class, name = "STUDANT")})
@@ -19,12 +23,20 @@ public abstract class PersonDTO {
         this.personType = personType;
     }
 
+    @NotEmpty
     private String lastName;
+
+    @NotEmpty
 
     private String firstName;
 
+    @NotEmpty
+    @Size(min = 11, max = 11,message = "Cpf não pode ser diferente de 11 caracteres")
     private String cpf;
 
+    @NotNull
     private PersonTypeEnum personType;
+
+
 
 }

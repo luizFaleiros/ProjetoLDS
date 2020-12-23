@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class PersonController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Person> update(@RequestBody PersonDTO personDTO,
+    public ResponseEntity<Person> update(@Valid @RequestBody PersonDTO personDTO,
                                          @PathVariable Long id) {
 
         return ResponseEntity.ok(personService.update(personDTO,id));

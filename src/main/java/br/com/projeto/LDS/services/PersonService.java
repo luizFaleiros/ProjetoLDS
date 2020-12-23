@@ -32,7 +32,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
 
     @Override
     public Person getById(Long id) {
-        return personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
+        return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException("Pessoa não encontrada"));
     }
 
     @Override

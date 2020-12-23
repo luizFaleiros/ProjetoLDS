@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotNull;
+
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
@@ -20,7 +22,9 @@ public class StudantDTO extends PersonDTO {
         super(PersonTypeEnum.STUDANT);
     }
 
+    @NotNull
     private TCC tcc;
 
+    @NotNull
     private String code;
 }
