@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT --port $PORT
+web: java $JAVA_OPTS -Spring.profiles.active=prod -jar target/LDS-0.0.1-SNAPSHOT.jar --port $PORT
