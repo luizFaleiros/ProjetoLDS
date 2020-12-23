@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.function.Supplier;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class PersonNotFoundException extends RuntimeException {
+public class NotFoundException extends RuntimeException {
 
-    public PersonNotFoundException(String message, Throwable cause) {
+    public NotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public PersonNotFoundException(String message) {
+    public NotFoundException(String message) {
         super("Pessoa não encontrada");
     }
 

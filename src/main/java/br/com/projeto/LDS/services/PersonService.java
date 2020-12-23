@@ -1,14 +1,9 @@
 package br.com.projeto.LDS.services;
 
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
-import br.com.projeto.LDS.domains.DTO.ProfessorDTO;
-import br.com.projeto.LDS.domains.DTO.StudantDTO;
 import br.com.projeto.LDS.domains.entities.Person;
-import br.com.projeto.LDS.domains.entities.Professor;
-import br.com.projeto.LDS.domains.entities.Studant;
-import br.com.projeto.LDS.domains.mappers.ProfessorMapper;
-import br.com.projeto.LDS.domains.mappers.StudantMapper;
-import br.com.projeto.LDS.exceptions.PersonNotFoundException;
+import br.com.projeto.LDS.domains.mappers.PersonMapper;
+import br.com.projeto.LDS.exceptions.NotFoundException;
 import br.com.projeto.LDS.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +17,7 @@ import java.util.Map;
 public class PersonService implements BaseService<Person, PersonDTO> {
 
     private final PersonRepository personRepository;
-    private final StudantMapper studantMapper;
-    private final ProfessorMapper professorMapper;
+    private final PersonMapper personMapper;
 
     @Override
     public List<Person> listAll() {
@@ -32,7 +26,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
 
     @Override
     public Person getById(Long id) {
-        return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException("Pessoa não encontrada"));
+        return personRepository.findById(id).orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
     }
 
     @Override
@@ -43,13 +37,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     @Override
     public void save(PersonDTO person) {
         Person p;
-        if (person instanceof ProfessorDTO) {
-            p = professorMapper.toEntity((ProfessorDTO) person);
-        } else if (person instanceof StudantDTO) {
-            p = studantMapper.toEntity((StudantDTO) person);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        p = personMapper.toEntity(person);
         p.setCreatedDate(LocalDate.now());
         p.setModifiedDate(LocalDate.now());
         personRepository.save(p);
@@ -61,15 +49,9 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         p.setCpf(person.getCpf());
         p.setLastName(person.getLastName());
         p.setName(person.getFirstName());
-        if (person instanceof ProfessorDTO) {
-            p = professorMapper.updateEntity((Professor) p,(ProfessorDTO) person);
-        } else if (person instanceof StudantDTO) {
-            p = studantMapper.updateEntity((Studant) p,(StudantDTO) person);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        p = personMapper.updateEntity(p,person);
         p.setModifiedDate(LocalDate.now());
-        return null;
+        return p;
     }
 
     @Override

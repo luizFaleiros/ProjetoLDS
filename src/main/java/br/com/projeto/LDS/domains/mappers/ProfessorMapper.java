@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class ProfessorMapper {
 
-    ProfessorDTO toDto(Professor entity) {
+    public ProfessorDTO toDto(Professor entity) {
         return ProfessorDTO.builder()
                 .cpf(entity.getCpf())
                 .firstName(entity.getName())
