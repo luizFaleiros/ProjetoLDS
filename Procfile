@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Dspring.profiles.active=prod -jar target/LDS-0.0.1-SNAPSHOT.jar --port $PORT
+web: java --port=$PORT -Dspring.profiles.active=prod $JAVA_OPTS -jar target/LDS-0.0.1-SNAPSHOT.jar
