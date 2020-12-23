@@ -119,7 +119,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>br.com.projeto.LDS.LdsApplication</mainClass>
+                            <mainClass>br.com.projeto.LDS</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
