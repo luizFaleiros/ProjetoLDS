@@ -6,6 +6,7 @@ import br.com.projeto.LDS.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/person")
@@ -45,7 +47,6 @@ public class PersonController {
 
     @GetMapping("/list")
     public ResponseEntity<List<Person>> list() {
-
         return ResponseEntity.ok(personService.listAll());
     }
 
@@ -54,5 +55,12 @@ public class PersonController {
                                          @PathVariable Long id) {
 
         return ResponseEntity.ok(personService.update(personDTO,id));
+    }
+
+    @PatchMapping("/patch/{id}")
+    public ResponseEntity<Person> update(@Valid @RequestBody Map<String, Object> personDTO,
+                                         @PathVariable Long id) {
+
+        return ResponseEntity.ok(personService.patch(personDTO,id));
     }
 }

@@ -6,6 +6,7 @@ import br.com.projeto.LDS.domains.mappers.PersonMapper;
 import br.com.projeto.LDS.exceptions.NotFoundException;
 import br.com.projeto.LDS.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
 
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<Person> listAll() {
@@ -41,6 +43,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         p.setCreatedDate(LocalDate.now());
         p.setModifiedDate(LocalDate.now());
         personRepository.save(p);
+        p.setPass(passwordEncoder.encode(person.getPassword()));
     }
 
     @Override

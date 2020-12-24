@@ -20,6 +20,7 @@ public class PersonMapper {
         return ProfessorDTO.builder()
                 .cpf(entity.getCpf())
                 .firstName(entity.getName())
+                .password(entity.getPass())
                 .personType(entity.getPersonType())
                 .lastName(entity.getLastName())
                 .build();
@@ -52,6 +53,7 @@ public class PersonMapper {
                 .lastName(dto.getLastName())
                 .personType(dto.getPersonType())
                 .name(dto.getFirstName())
+                .pass(dto.getPassword())
                 .build();
     }
 
@@ -68,6 +70,7 @@ public class PersonMapper {
                 .lastName(entity.getLastName())
                 .cpf(entity.getCpf())
                 .personType(entity.getPersonType())
+                .password(entity.getPass())
                 .build();
     }
 
@@ -78,6 +81,7 @@ public class PersonMapper {
                 .lastName(dto.getLastName())
                 .name(dto.getFirstName())
                 .code(dto.getCode())
+                .pass(dto.getPassword())
                 .build();
     }
 
