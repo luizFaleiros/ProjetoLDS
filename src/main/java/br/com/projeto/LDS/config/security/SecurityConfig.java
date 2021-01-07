@@ -1,5 +1,8 @@
 package br.com.projeto.LDS.config.security;
 
+import br.com.projeto.LDS.config.security.jwt.JwtAuthenticationFilter;
+import br.com.projeto.LDS.config.security.jwt.JwtAuthorizationFilter;
+import br.com.projeto.LDS.config.security.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private Environment env;
 
     @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
     private UserDetailsService userDetailsService;
 
     private static final String[] PUBLIC_MATCHERS = {
@@ -36,12 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            "/h2-console/**"
+            "/h2-console/**",
+            "/person/save"
     };
-    private static final String[] PUBLIC_MATCHERS_GET = {
-            "/person/**"
-    };
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -51,9 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.cors().and().csrf().disable();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .anyRequest().authenticated();
+        http.addFilter(new JwtAuthenticationFilter(authenticationManager(),jwtUtil));
+        http.addFilter(new JwtAuthorizationFilter(authenticationManager(),jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

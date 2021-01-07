@@ -40,4 +40,7 @@ public abstract class PersonDTO {
     @NotEmpty
     private String password;
 
+    @NotEmpty
+    private String email;
+
 }

@@ -7,6 +7,7 @@ import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Professor;
 import br.com.projeto.LDS.domains.entities.Studant;
 import br.com.projeto.LDS.domains.entities.TCC;
+import br.com.projeto.LDS.enums.PerfilEnum;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ public class PersonMapper {
                 .password(entity.getPass())
                 .personType(entity.getPersonType())
                 .lastName(entity.getLastName())
+                .email(entity.getEmail())
                 .build();
     }
 
@@ -47,14 +49,17 @@ public class PersonMapper {
     }
 
     public Professor toEntity(ProfessorDTO dto) {
-        return Professor.builder()
+        Professor professor = Professor.builder()
                 .tcc(ListUtils.emptyIfNull(dto.getTccs()).stream().collect(Collectors.toSet()))
                 .cpf(dto.getCpf())
                 .lastName(dto.getLastName())
                 .personType(dto.getPersonType())
                 .name(dto.getFirstName())
                 .pass(dto.getPassword())
+                .email(dto.getEmail())
                 .build();
+        professor.addPerfil(PerfilEnum.PROFESSOR);
+        return professor;
     }
 
     public Professor updateEntity(Professor p, ProfessorDTO person) {
@@ -75,14 +80,17 @@ public class PersonMapper {
     }
 
     public Studant toEntity(StudantDTO dto) {
-        return Studant.builder()
+        Studant studant = Studant.builder()
                 .tcc(dto.getTcc())
                 .cpf(dto.getCpf())
                 .lastName(dto.getLastName())
                 .name(dto.getFirstName())
                 .code(dto.getCode())
                 .pass(dto.getPassword())
+                .email(dto.getEmail())
                 .build();
+        studant.addPerfil(PerfilEnum.PARTICIPANT);
+        return studant;
     }
 
     public Person updateEntity(Studant p, StudantDTO person) {

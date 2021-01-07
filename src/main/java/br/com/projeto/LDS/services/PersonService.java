@@ -21,6 +21,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     private final PersonMapper personMapper;
     private final BCryptPasswordEncoder passwordEncoder;
 
+
     @Override
     public List<Person> listAll() {
         return personRepository.findAll();
@@ -42,6 +43,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         p = personMapper.toEntity(person);
         p.setCreatedDate(LocalDate.now());
         p.setModifiedDate(LocalDate.now());
+        p.setPass(passwordEncoder.encode(p.getPass()));
         personRepository.save(p);
         p.setPass(passwordEncoder.encode(person.getPassword()));
     }

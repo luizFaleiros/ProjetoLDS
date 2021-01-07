@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PerfilEnum {
     ADMIN(1,"ROLE_ADMIN"),
-    LIDER(2,"ROLE_MODERATOR"),
+    PROFESSOR(2,"ROLE_PROFESSOR"),
     PARTICIPANT(3,"ROLE_PARTICIPANT");
 
     private final int code;
