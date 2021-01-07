@@ -6,14 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class loginDTO {
+public class LoginDTO {
 
+    @NotEmpty
     private String email;
 
+    @NotEmpty
     private String password;
 }
