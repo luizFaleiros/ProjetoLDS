@@ -1,5 +1,6 @@
 package br.com.projeto.LDS.config.security.jwt;
 
+import br.com.projeto.LDS.config.security.UserDetailSecurity;
 import br.com.projeto.LDS.domains.DTO.LoginDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -50,7 +51,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        super.successfulAuthentication(request, response, chain, authResult);
+        String username = ((UserDetailSecurity) authResult.getPrincipal()).getUsername();
+        String token = jwtUtil.generateToken(username);
+        response.addHeader("Authorization","Bearer "+token);
     }
 
     private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
