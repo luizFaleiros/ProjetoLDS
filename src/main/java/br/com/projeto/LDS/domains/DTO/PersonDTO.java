@@ -37,6 +37,10 @@ public abstract class PersonDTO {
     @NotNull
     private PersonTypeEnum personType;
 
+    @NotEmpty
+    private String password;
 
+    @NotEmpty
+    private String email;
 
 }

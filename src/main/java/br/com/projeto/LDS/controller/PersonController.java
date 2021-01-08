@@ -5,7 +5,9 @@ import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/person")
@@ -30,12 +33,14 @@ public class PersonController {
         return ResponseEntity.ok(personService.getById(id));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save-all")
     public ResponseEntity<Void> saveAll(@RequestBody List<PersonDTO> personList) {
         personService.saveAll(personList);
         return ResponseEntity.created(URI.create("Deu certo")).body(null);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save")
     public ResponseEntity<Void> save(@RequestBody PersonDTO person) {
         personService.save(person);
@@ -45,7 +50,6 @@ public class PersonController {
 
     @GetMapping("/list")
     public ResponseEntity<List<Person>> list() {
-
         return ResponseEntity.ok(personService.listAll());
     }
 
@@ -55,4 +59,13 @@ public class PersonController {
 
         return ResponseEntity.ok(personService.update(personDTO,id));
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
+    @PatchMapping("/patch/{id}")
+    public ResponseEntity<Person> update(@Valid @RequestBody Map<String, Object> personDTO,
+                                         @PathVariable Long id) {
+
+        return ResponseEntity.ok(personService.patch(personDTO,id));
+    }
+
 }
