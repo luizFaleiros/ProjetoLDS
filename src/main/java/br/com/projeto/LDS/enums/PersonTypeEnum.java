@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum PersonTypeEnum {
-    PROFESSOR(1, "Professor"),
-    ADMIN(1, "Admin"),
-    STUDANT(2, "Estudante");
+    PROFESSOR(1, "PROFESSOR"),
+    ADMIN(1, "ADMIN"),
+    STUDANT(2, "ESTUDANTE");
 
     private final int code;
     private final String description;

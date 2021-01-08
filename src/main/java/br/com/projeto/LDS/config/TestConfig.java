@@ -1,6 +1,5 @@
 package br.com.projeto.LDS.config;
 
-import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Professor;
 import br.com.projeto.LDS.domains.entities.Studant;
 import br.com.projeto.LDS.domains.entities.TCC;
@@ -8,15 +7,12 @@ import br.com.projeto.LDS.enums.PerfilEnum;
 import br.com.projeto.LDS.enums.PersonTypeEnum;
 import br.com.projeto.LDS.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,7 +45,7 @@ public class TestConfig {
                 .name("teste")
                 .email("email2@email.com")
                 .lastName("teste")
-                .perfis(Set.of(PerfilEnum.PARTICIPANT))
+                .perfis(Set.of(PerfilEnum.STUDANT))
                 .personType(PersonTypeEnum.PROFESSOR)
                 .createdDate(LocalDate.now())
                 .modifiedDate(LocalDate.now())

@@ -14,7 +14,7 @@ public class NotFoundException extends RuntimeException {
     }
 
     public NotFoundException(String message) {
-        super("Pessoa não encontrada");
+        super(message);
     }
 
 }

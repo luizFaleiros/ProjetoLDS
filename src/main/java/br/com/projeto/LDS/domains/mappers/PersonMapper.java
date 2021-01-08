@@ -6,12 +6,10 @@ import br.com.projeto.LDS.domains.DTO.StudantDTO;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Professor;
 import br.com.projeto.LDS.domains.entities.Studant;
-import br.com.projeto.LDS.domains.entities.TCC;
 import br.com.projeto.LDS.enums.PerfilEnum;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -89,7 +87,7 @@ public class PersonMapper {
                 .pass(dto.getPassword())
                 .email(dto.getEmail())
                 .build();
-        studant.addPerfil(PerfilEnum.PARTICIPANT);
+        studant.addPerfil(PerfilEnum.STUDANT);
         return studant;
     }
 

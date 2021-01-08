@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum PerfilEnum {
     ADMIN(1,"ROLE_ADMIN"),
     PROFESSOR(2,"ROLE_PROFESSOR"),
-    PARTICIPANT(3,"ROLE_PARTICIPANT");
+    STUDANT(3,"ROLE_STUDANT");
 
     private final int code;
     private final String description;
@@ -22,6 +22,7 @@ public enum PerfilEnum {
                 return personType;
             }
         }
+
         throw new IllegalArgumentException();
 
     }

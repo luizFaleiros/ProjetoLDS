@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 public class UserDetailSecurity implements UserDetails {
 
     private String email;
@@ -41,6 +40,10 @@ public class UserDetailSecurity implements UserDetails {
         return this.email;
     }
 
+    public Long getId() {
+        return this.id;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -59,5 +62,9 @@ public class UserDetailSecurity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean hasRole(PerfilEnum perfil){
+        return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescription()));
     }
 }
