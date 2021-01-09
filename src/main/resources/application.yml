@@ -7,7 +7,6 @@ spring:
     password: ${db-pass}
     username: ${db-user}
     url: ${db-url}
-    driver: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       naming:
@@ -21,6 +20,8 @@ spring:
   config:
     activate:
       on-profile: dev
+  datasource:
+    driver: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
