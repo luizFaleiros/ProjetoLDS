@@ -86,6 +86,7 @@ public class PersonMapper {
                 .code(dto.getCode())
                 .pass(dto.getPassword())
                 .email(dto.getEmail())
+                .personType(dto.getPersonType())
                 .build();
         studant.addPerfil(PerfilEnum.STUDANT);
         return studant;

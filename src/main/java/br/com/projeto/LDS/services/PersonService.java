@@ -27,7 +27,8 @@ public class PersonService implements BaseService<Person, PersonDTO> {
 
     @Override
     public List<Person> listAll() {
-        return personRepository.findAll();
+        List<Person> personList = personRepository.findAll();
+        return personList ;
     }
 
     @Override
