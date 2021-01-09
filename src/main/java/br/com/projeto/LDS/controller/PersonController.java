@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,15 +40,17 @@ public class PersonController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save-all")
-    public ResponseEntity<Void> saveAll(@RequestBody List<PersonDTO> personList) {
-        personService.saveAll(personList);
+    public ResponseEntity<Void> saveAll(@RequestBody List<PersonDTO> personList,
+                                        @RequestHeader("Authorization") String token) {
+        personService.saveAll(personList,token);
         return ResponseEntity.created(URI.create("Deu certo")).body(null);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save")
-    public ResponseEntity<Void> save(@RequestBody PersonDTO person) {
-        personService.save(person);
+    public ResponseEntity<Void> save(@RequestBody PersonDTO person,
+                                     @RequestHeader("Authorization") String token) {
+        personService.save(person,token);
         return ResponseEntity.created(URI.create("Deu_certo")).body(null);
     }
 
@@ -62,17 +65,19 @@ public class PersonController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Person> update(@Valid @RequestBody PersonDTO personDTO,
-                                         @PathVariable Long id) {
+                                         @PathVariable Long id,
+                                         @RequestHeader("Authorization") String token) {
 
-        return ResponseEntity.ok(personService.update(personDTO,id));
+        return ResponseEntity.ok(personService.update(personDTO,id,token));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @PatchMapping("/patch/{id}")
     public ResponseEntity<Person> update(@Valid @RequestBody Map<String, Object> personDTO,
-                                         @PathVariable Long id) {
+                                         @PathVariable Long id,
+                                         @RequestHeader("Authorization") String token) {
 
-        return ResponseEntity.ok(personService.patch(personDTO,id));
+        return ResponseEntity.ok(personService.patch(personDTO,id,token));
     }
 
 }

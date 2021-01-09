@@ -54,7 +54,12 @@ public class JwtUtil {
 
     public String getUsername(String token) {
         String username = null;
+
+        if(token.startsWith("Bearer ")){
+            token = token.substring(7);
+        }
         Claims claims = getClaims(token);
+
         if (Objects.nonNull(claims)) {
             username = claims.getSubject();
         }

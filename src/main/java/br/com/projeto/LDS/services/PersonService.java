@@ -1,6 +1,7 @@
 package br.com.projeto.LDS.services;
 
 import br.com.projeto.LDS.config.security.UserDetailSecurity;
+import br.com.projeto.LDS.config.security.jwt.JwtUtil;
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.mappers.PersonMapper;
@@ -23,6 +24,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
 
     @Override
@@ -42,14 +44,15 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public void saveAll(List<PersonDTO> personList) {
+    public void saveAll(List<PersonDTO> personList,String token) {
 
     }
 
     @Override
-    public void save(PersonDTO person) {
+    public void save(PersonDTO person,String token) {
         Person p;
         p = personMapper.toEntity(person);
+        p.setModifiedBy(jwtUtil.getUsername(token));
         p.setCreatedDate(LocalDate.now());
         p.setModifiedDate(LocalDate.now());
         p.setPass(passwordEncoder.encode(p.getPass()));
@@ -58,8 +61,9 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public Person update(PersonDTO person, Long id) {
+    public Person update(PersonDTO person, Long id,String token) {
         Person p = getById(id);
+        p.setModifiedBy(jwtUtil.getUsername(token));
         p.setCpf(person.getCpf());
         p.setLastName(person.getLastName());
         p.setName(person.getFirstName());
@@ -69,7 +73,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public Person patch(Map<String, Object> patch, Long id) {
+    public Person patch(Map<String, Object> patch, Long id,String token) {
         return null;
     }
 
