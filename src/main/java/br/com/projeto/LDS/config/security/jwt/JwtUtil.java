@@ -55,6 +55,7 @@ public class JwtUtil {
     public String getUsername(String token) {
         String username = null;
         Claims claims = getClaims(token);
+
         if (Objects.nonNull(claims)) {
             username = claims.getSubject();
         }

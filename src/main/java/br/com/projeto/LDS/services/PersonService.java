@@ -1,14 +1,19 @@
 package br.com.projeto.LDS.services;
 
 import br.com.projeto.LDS.config.security.UserDetailSecurity;
+import br.com.projeto.LDS.config.security.jwt.JwtUtil;
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.mappers.PersonMapper;
 import br.com.projeto.LDS.enums.PerfilEnum;
 import br.com.projeto.LDS.exceptions.AuthorizationException;
+import br.com.projeto.LDS.exceptions.DuplicateException;
 import br.com.projeto.LDS.exceptions.NotFoundException;
 import br.com.projeto.LDS.repositories.PersonRepository;
+import javassist.bytecode.DuplicateMemberException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +24,10 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class PersonService implements BaseService<Person, PersonDTO> {
-
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
 
     @Override
@@ -42,24 +47,38 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public void saveAll(List<PersonDTO> personList) {
+    public void saveAll(List<PersonDTO> personList,String token) {
 
     }
 
     @Override
-    public void save(PersonDTO person) {
+    public void save(PersonDTO person,String token) {
+        UserDetailSecurity user = UserServices.athenticated();
+        if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
+            throw new AuthorizationException("Acesso negado");
+        }
         Person p;
         p = personMapper.toEntity(person);
+        p.setModifiedBy(user.getUsername());
         p.setCreatedDate(LocalDate.now());
         p.setModifiedDate(LocalDate.now());
         p.setPass(passwordEncoder.encode(p.getPass()));
-        personRepository.save(p);
+        try {
+            personRepository.saveAndFlush(p);
+        }catch (DataIntegrityViolationException e ){
+            throw new DuplicateException("Cadastro duplicado");
+        }
         p.setPass(passwordEncoder.encode(person.getPassword()));
     }
 
     @Override
-    public Person update(PersonDTO person, Long id) {
+    public Person update(PersonDTO person, Long id,String token) {
+        UserDetailSecurity user = UserServices.athenticated();
+        if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
+            throw new AuthorizationException("Acesso negado");
+        }
         Person p = getById(id);
+        p.setModifiedBy(user.getUsername());
         p.setCpf(person.getCpf());
         p.setLastName(person.getLastName());
         p.setName(person.getFirstName());
@@ -69,7 +88,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public Person patch(Map<String, Object> patch, Long id) {
+    public Person patch(Map<String, Object> patch, Long id,String token) {
         return null;
     }
 

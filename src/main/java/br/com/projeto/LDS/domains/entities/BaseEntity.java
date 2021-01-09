@@ -26,6 +26,9 @@ public abstract class BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "MODIFIED_BY")
+    private String modifiedBy;
+
     @Column(name = "CREATED_DATE")
     private LocalDate createdDate;
 

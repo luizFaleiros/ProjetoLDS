@@ -1,6 +1,7 @@
 package br.com.projeto.LDS.controller;
 
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
+import br.com.projeto.LDS.domains.DTO.response.PersonResponse;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.mappers.PersonMapper;
 import br.com.projeto.LDS.services.PersonService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,47 +34,51 @@ public class PersonController {
     private final PersonMapper personMapper;
 
     @GetMapping("/get-by-id/{id}")
-    public ResponseEntity<Person> getById(@PathVariable Long id) {
+    public ResponseEntity<PersonResponse> getById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(personService.getById(id));
+        return ResponseEntity.ok(personMapper.toResponse(personService.getById(id)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save-all")
-    public ResponseEntity<Void> saveAll(@RequestBody List<PersonDTO> personList) {
-        personService.saveAll(personList);
+    public ResponseEntity<Void> saveAll(@RequestBody List<PersonDTO> personList,
+                                        @RequestHeader("Authorization") String token) {
+        personService.saveAll(personList,token);
         return ResponseEntity.created(URI.create("Deu certo")).body(null);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save")
-    public ResponseEntity<Void> save(@RequestBody PersonDTO person) {
-        personService.save(person);
+    public ResponseEntity<Void> save(@RequestBody PersonDTO person,
+                                     @RequestHeader("Authorization") String token) {
+        personService.save(person,token);
         return ResponseEntity.created(URI.create("Deu_certo")).body(null);
     }
 
 
     @GetMapping("/list")
-    public ResponseEntity<List<PersonDTO>> list() {
+    public ResponseEntity<List<PersonResponse>> list() {
         return ResponseEntity.ok(personService.listAll()
                 .stream()
-                .map(personMapper::toDto)
+                .map(personMapper::toResponse)
                 .collect(Collectors.toList()));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Person> update(@Valid @RequestBody PersonDTO personDTO,
-                                         @PathVariable Long id) {
+    public ResponseEntity<PersonResponse> update(@Valid @RequestBody PersonDTO personDTO,
+                                         @PathVariable Long id,
+                                         @RequestHeader("Authorization") String token) {
 
-        return ResponseEntity.ok(personService.update(personDTO,id));
+        return ResponseEntity.ok(personMapper.toResponse(personService.update(personDTO,id,token)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<Person> update(@Valid @RequestBody Map<String, Object> personDTO,
-                                         @PathVariable Long id) {
+    public ResponseEntity<PersonResponse> update(@Valid @RequestBody Map<String, Object> personDTO,
+                                         @PathVariable Long id,
+                                         @RequestHeader("Authorization") String token) {
 
-        return ResponseEntity.ok(personService.patch(personDTO,id));
+        return ResponseEntity.ok(personMapper.toResponse(personService.patch(personDTO,id,token)));
     }
 
 }

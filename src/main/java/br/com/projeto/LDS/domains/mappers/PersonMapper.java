@@ -3,6 +3,9 @@ package br.com.projeto.LDS.domains.mappers;
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
 import br.com.projeto.LDS.domains.DTO.ProfessorDTO;
 import br.com.projeto.LDS.domains.DTO.StudantDTO;
+import br.com.projeto.LDS.domains.DTO.response.PersonResponse;
+import br.com.projeto.LDS.domains.DTO.response.ProfessorResponse;
+import br.com.projeto.LDS.domains.DTO.response.StudantResponse;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Professor;
 import br.com.projeto.LDS.domains.entities.Studant;
@@ -108,5 +111,33 @@ public class PersonMapper {
             p = atual;
         }
         return p;
+    }
+
+    public PersonResponse toResponse(Person entity) {
+        PersonResponse p;
+        if (entity instanceof Professor) {
+            p = toResponse((Professor) entity);
+        } else {
+            p = toResponse((Studant) entity);
+        }
+        return p;
+    }
+
+    public ProfessorResponse toResponse(Professor entity) {
+        return ProfessorResponse.builder()
+                .firstName(entity.getName())
+                .personType(entity.getPersonType())
+                .lastName(entity.getLastName())
+                .email(entity.getEmail())
+                .build();
+    }
+
+    public StudantResponse toResponse(Studant entity) {
+        return StudantResponse.builder()
+                .tcc(entity.getTcc())
+                .firstName(entity.getName())
+                .lastName(entity.getLastName())
+                .personType(entity.getPersonType())
+                .build();
     }
 }

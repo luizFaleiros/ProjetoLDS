@@ -30,8 +30,10 @@ import java.util.List;
 @Data
 public class TCC extends BaseEntity {
 
+    @Column(name = "NAME")
     private String name;
 
+    @Column(name = "SUBJECTS")
     private String subjects;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "tcc")
