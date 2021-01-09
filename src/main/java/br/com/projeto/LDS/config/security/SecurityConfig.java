@@ -44,8 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            "/h2-console/**",
-            "/person/save"
+            "/h2-console/**"
     };
     @Override
     protected void configure(HttpSecurity http) throws Exception {

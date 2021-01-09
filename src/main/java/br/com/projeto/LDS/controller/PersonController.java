@@ -2,6 +2,7 @@ package br.com.projeto.LDS.controller;
 
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
 import br.com.projeto.LDS.domains.entities.Person;
+import br.com.projeto.LDS.domains.mappers.PersonMapper;
 import br.com.projeto.LDS.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/person")
@@ -26,6 +28,8 @@ import java.util.Map;
 public class PersonController {
 
     private final PersonService personService;
+
+    private final PersonMapper personMapper;
 
     @GetMapping("/get-by-id/{id}")
     public ResponseEntity<Person> getById(@PathVariable Long id) {
@@ -49,8 +53,11 @@ public class PersonController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<List<Person>> list() {
-        return ResponseEntity.ok(personService.listAll());
+    public ResponseEntity<List<PersonDTO>> list() {
+        return ResponseEntity.ok(personService.listAll()
+                .stream()
+                .map(personMapper::toDto)
+                .collect(Collectors.toList()));
     }
 
     @PutMapping("/update/{id}")

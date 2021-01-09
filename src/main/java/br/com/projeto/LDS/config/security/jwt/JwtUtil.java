@@ -21,7 +21,7 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(String username){
+    public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -32,11 +32,11 @@ public class JwtUtil {
     public boolean ValidtToken(String token) {
         Boolean isValidToken = false;
         Claims claims = getClaims(token);
-        if(Objects.nonNull(claims)){
+        if (Objects.nonNull(claims)) {
             String username = claims.getSubject();
             Date expirationDate = claims.getExpiration();
             Date now = new Date(System.currentTimeMillis());
-            if(Objects.nonNull(username) && Objects.nonNull(expirationDate) && now.before(expirationDate)){
+            if (Objects.nonNull(username) && Objects.nonNull(expirationDate) && now.before(expirationDate)) {
                 isValidToken = true;
             }
         }
@@ -46,20 +46,17 @@ public class JwtUtil {
     private Claims getClaims(String token) {
         try {
             return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
 
-
     public String getUsername(String token) {
         String username = null;
         Claims claims = getClaims(token);
-        if(Objects.nonNull(claims)){
-            if(Objects.nonNull(username)){
-                username = claims.getSubject();
-            }
+        if (Objects.nonNull(claims)) {
+            username = claims.getSubject();
         }
         return username;
     }
