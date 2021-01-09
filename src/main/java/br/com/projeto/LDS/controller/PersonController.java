@@ -1,6 +1,7 @@
 package br.com.projeto.LDS.controller;
 
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
+import br.com.projeto.LDS.domains.DTO.response.PersonResponse;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.mappers.PersonMapper;
 import br.com.projeto.LDS.services.PersonService;
@@ -33,9 +34,9 @@ public class PersonController {
     private final PersonMapper personMapper;
 
     @GetMapping("/get-by-id/{id}")
-    public ResponseEntity<Person> getById(@PathVariable Long id) {
+    public ResponseEntity<PersonResponse> getById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(personService.getById(id));
+        return ResponseEntity.ok(personMapper.toResponse(personService.getById(id)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -56,28 +57,28 @@ public class PersonController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<List<PersonDTO>> list() {
+    public ResponseEntity<List<PersonResponse>> list() {
         return ResponseEntity.ok(personService.listAll()
                 .stream()
-                .map(personMapper::toDto)
+                .map(personMapper::toResponse)
                 .collect(Collectors.toList()));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Person> update(@Valid @RequestBody PersonDTO personDTO,
+    public ResponseEntity<PersonResponse> update(@Valid @RequestBody PersonDTO personDTO,
                                          @PathVariable Long id,
                                          @RequestHeader("Authorization") String token) {
 
-        return ResponseEntity.ok(personService.update(personDTO,id,token));
+        return ResponseEntity.ok(personMapper.toResponse(personService.update(personDTO,id,token)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<Person> update(@Valid @RequestBody Map<String, Object> personDTO,
+    public ResponseEntity<PersonResponse> update(@Valid @RequestBody Map<String, Object> personDTO,
                                          @PathVariable Long id,
                                          @RequestHeader("Authorization") String token) {
 
-        return ResponseEntity.ok(personService.patch(personDTO,id,token));
+        return ResponseEntity.ok(personMapper.toResponse(personService.patch(personDTO,id,token)));
     }
 
 }
