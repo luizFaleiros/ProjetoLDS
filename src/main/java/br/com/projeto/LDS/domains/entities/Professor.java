@@ -1,10 +1,15 @@
 package br.com.projeto.LDS.domains.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import net.bytebuddy.implementation.bind.annotation.Super;
@@ -18,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -27,11 +33,13 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @PrimaryKeyJoinColumn(name="PK_PROFESSOR_PERSON", referencedColumnName="ID")
-public class Professor extends Person {
+public class Professor extends Person implements Serializable {
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set<TCC> tcc;
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "professor", orphanRemoval = true)
+    private List<TCC> tcc;
 
 }

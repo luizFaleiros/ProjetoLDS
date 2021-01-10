@@ -2,6 +2,7 @@ package br.com.projeto.LDS.exceptions.handler;
 
 import br.com.projeto.LDS.exceptions.AuthorizationException;
 import br.com.projeto.LDS.exceptions.DuplicateException;
+import br.com.projeto.LDS.exceptions.NotContentException;
 import br.com.projeto.LDS.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,17 @@ public class HandlerException {
         StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
+
     @ExceptionHandler(DuplicateException.class)
     public ResponseEntity<StandardError> duplicate(RuntimeException e, HttpServletRequest request) {
         StandardError err = new StandardError(HttpStatus.IM_USED.value(), e.getMessage(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.IM_USED).body(err);
+    }
+
+    @ExceptionHandler(NotContentException.class)
+    public ResponseEntity<StandardError> noContent(RuntimeException e, HttpServletRequest request) {
+        StandardError err = new StandardError(HttpStatus.NO_CONTENT.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(err);
     }
 
 }

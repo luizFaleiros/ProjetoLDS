@@ -3,16 +3,20 @@ package br.com.projeto.LDS.domains.mappers;
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
 import br.com.projeto.LDS.domains.DTO.ProfessorDTO;
 import br.com.projeto.LDS.domains.DTO.StudantDTO;
-import br.com.projeto.LDS.domains.DTO.response.PersonResponse;
-import br.com.projeto.LDS.domains.DTO.response.ProfessorResponse;
-import br.com.projeto.LDS.domains.DTO.response.StudantResponse;
+import br.com.projeto.LDS.domains.DTO.response.person.PersonResponse;
+import br.com.projeto.LDS.domains.DTO.response.person.PersonTccResponse;
+import br.com.projeto.LDS.domains.DTO.response.person.ProfessorResponse;
+import br.com.projeto.LDS.domains.DTO.response.person.StudantResponse;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Professor;
 import br.com.projeto.LDS.domains.entities.Studant;
+import br.com.projeto.LDS.domains.entities.TCC;
 import br.com.projeto.LDS.enums.PerfilEnum;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -51,7 +55,7 @@ public class PersonMapper {
 
     public Professor toEntity(ProfessorDTO dto) {
         Professor professor = Professor.builder()
-                .tcc(ListUtils.emptyIfNull(dto.getTccs()).stream().collect(Collectors.toSet()))
+                .tcc(new ArrayList<>(ListUtils.emptyIfNull(dto.getTccs())))
                 .cpf(dto.getCpf())
                 .lastName(dto.getLastName())
                 .personType(dto.getPersonType())
@@ -63,8 +67,8 @@ public class PersonMapper {
         return professor;
     }
 
-    public Professor updateEntity(Professor p, ProfessorDTO person) {
-        p.setTcc(ListUtils.emptyIfNull(person.getTccs()).stream().collect(Collectors.toSet()));
+    public Professor updateEntity(Professor p, Professor person) {
+        p.setTcc(new ArrayList<>(ListUtils.emptyIfNull(person.getTcc())));
         return p;
     }
 
@@ -95,49 +99,70 @@ public class PersonMapper {
         return studant;
     }
 
-    public Person updateEntity(Studant p, StudantDTO person) {
+    public Person updateEntity(Studant p, Studant person) {
         p.setCode(person.getCode());
         p.setTcc(person.getTcc());
         return p;
     }
 
-    public Person updateEntity(Person atual, PersonDTO update) {
+    public Person updateEntity(Person atual, Person update) {
         Person p;
-        if (atual instanceof Professor && update instanceof ProfessorDTO) {
-            p = updateEntity((Professor) atual, (ProfessorDTO) update);
-        } else if (atual instanceof Studant && update instanceof StudantDTO) {
-            p = updateEntity((Studant) atual, (StudantDTO) update);
-        }else {
+        if (atual instanceof Professor && update instanceof Professor) {
+            p = updateEntity((Professor) atual, (Professor) update);
+        } else if (atual instanceof Studant && update instanceof Studant) {
+            p = updateEntity((Studant) atual, (Studant) update);
+        } else {
             p = atual;
         }
         return p;
     }
 
     public PersonResponse toResponse(Person entity) {
-        PersonResponse p;
+
         if (entity instanceof Professor) {
-            p = toResponse((Professor) entity);
+            return toResponse((Professor) entity);
         } else {
-            p = toResponse((Studant) entity);
+            return toResponse((Studant) entity);
         }
-        return p;
     }
 
     public ProfessorResponse toResponse(Professor entity) {
-        return ProfessorResponse.builder()
-                .firstName(entity.getName())
-                .personType(entity.getPersonType())
-                .lastName(entity.getLastName())
-                .email(entity.getEmail())
-                .build();
+        return Optional.ofNullable(entity).map(
+                professor -> ProfessorResponse.builder()
+                        .id(entity.getId())
+                        .firstName(entity.getName())
+                        .personType(entity.getPersonType())
+                        .lastName(entity.getLastName())
+                        .email(entity.getEmail())
+                        .tccs(entity.getTcc().stream().map(this::toTcc).collect(Collectors.toList()))
+                        .build()).orElse(null);
     }
+
+    private PersonTccResponse toTcc(TCC tcc) {
+        return Optional.ofNullable(tcc).map(
+                tccp -> PersonTccResponse.builder()
+                .name(tcc.getName())
+                .id(tcc.getId())
+                .build()
+        ).orElse(null);
+    }
+
 
     public StudantResponse toResponse(Studant entity) {
         return StudantResponse.builder()
-                .tcc(entity.getTcc())
+                .id(entity.getId())
+                .tcc(toTcc(entity.getTcc()))
                 .firstName(entity.getName())
                 .lastName(entity.getLastName())
                 .personType(entity.getPersonType())
                 .build();
     }
+
+    public Studant idToEntity(Long id) {
+        return Studant.builder()
+                .id(id)
+                .build();
+
+    }
+
 }

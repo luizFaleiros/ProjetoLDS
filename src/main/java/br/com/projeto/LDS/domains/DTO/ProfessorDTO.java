@@ -22,5 +22,6 @@ public class ProfessorDTO extends PersonDTO {
         super(PersonTypeEnum.PROFESSOR);
     }
 
+
     private List<TCC> tccs;
 }

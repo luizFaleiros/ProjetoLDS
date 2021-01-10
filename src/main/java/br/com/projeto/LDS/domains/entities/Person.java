@@ -17,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -30,7 +31,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public abstract class Person extends BaseEntity{
+public abstract class Person extends BaseEntity implements Serializable {
 
     @Column(name = "NAME", nullable = false)
     private String name;
