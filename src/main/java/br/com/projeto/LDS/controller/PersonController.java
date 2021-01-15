@@ -39,14 +39,14 @@ public class PersonController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save-all")
-    public ResponseEntity<Void> saveAll(@Valid @RequestBody List<PersonDTO> personList) {
+    public ResponseEntity<Void> saveAll(@RequestBody @Valid List<PersonDTO> personList) {
         personService.saveAll(personList.stream().map(personMapper::toEntity).collect(Collectors.toList()));
         return ResponseEntity.created(URI.create("Deu certo")).body(null);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save")
-    public ResponseEntity<Void> save(@Valid @RequestBody PersonDTO person) {
+    public ResponseEntity<Void> save(@RequestBody @Valid  PersonDTO person) {
         personService.save(personMapper.toEntity(person));
         return ResponseEntity.created(URI.create("Deu_certo")).body(null);
     }

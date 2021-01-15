@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,24 +24,23 @@ public abstract class PersonDTO {
         this.personType = personType;
     }
 
-    @NotEmpty
+    @NotBlank
     private String lastName;
 
-    @NotEmpty
-
+    @NotBlank
     private String firstName;
 
-    @NotEmpty
+    @NotBlank
     @Size(min = 11, max = 11,message = "Cpf não pode ser diferente de 11 caracteres")
     private String cpf;
 
-    @NotNull
+    @NotBlank
     private PersonTypeEnum personType;
 
-    @NotEmpty
+    @NotBlank
     private String password;
 
-    @NotEmpty
+    @NotBlank
     private String email;
 
 }
