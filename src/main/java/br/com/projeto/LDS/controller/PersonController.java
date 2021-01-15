@@ -33,25 +33,18 @@ public class PersonController {
 
     private final PersonMapper personMapper;
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @GetMapping("/get-by-id/{id}")
     public ResponseEntity<PersonResponse> getById(@PathVariable Long id) {
 
         return ResponseEntity.ok(personMapper.toResponse(personService.getById(id)));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @PostMapping("/save-all")
-    public ResponseEntity<Void> saveAll(@RequestBody List<PersonDTO> personList,
-                                        @RequestHeader("Authorization") String token) {
-        personService.saveAll(personList,token);
-        return ResponseEntity.created(URI.create("Deu certo")).body(null);
-    }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save")
-    public ResponseEntity<Void> save(@RequestBody PersonDTO person,
-                                     @RequestHeader("Authorization") String token) {
-        personService.save(person,token);
+    public ResponseEntity<Void> save(@RequestBody PersonDTO person) {
+        personService.save(person);
         return ResponseEntity.created(URI.create("Deu_certo")).body(null);
     }
 
@@ -65,22 +58,20 @@ public class PersonController {
                 .collect(Collectors.toList()));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @PutMapping("/update/{id}")
     public ResponseEntity<PersonResponse> update(@Valid @RequestBody PersonDTO personDTO,
-                                         @PathVariable Long id,
-                                         @RequestHeader("Authorization") String token) {
+                                         @PathVariable Long id) {
 
-        return ResponseEntity.ok(personMapper.toResponse(personService.update(personDTO,id,token)));
+        return ResponseEntity.ok(personMapper.toResponse(personService.update(personDTO,id)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @PatchMapping("/patch/{id}")
     public ResponseEntity<PersonResponse> update(@Valid @RequestBody Map<String, Object> personDTO,
-                                         @PathVariable Long id,
-                                         @RequestHeader("Authorization") String token) {
+                                         @PathVariable Long id) {
 
-        return ResponseEntity.ok(personMapper.toResponse(personService.patch(personDTO,id,token)));
+        return ResponseEntity.ok(personMapper.toResponse(personService.patch(personDTO,id)));
     }
 
 }

@@ -24,6 +24,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class PersonService implements BaseService<Person, PersonDTO> {
+
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -47,12 +48,13 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public void saveAll(List<PersonDTO> personList,String token) {
+    public void saveAll(List<PersonDTO> personDTOS, String token) {
 
     }
 
+
     @Override
-    public void save(PersonDTO person,String token) {
+    public void save(PersonDTO person) {
         UserDetailSecurity user = UserServices.athenticated();
         if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
             throw new AuthorizationException("Acesso negado");
@@ -72,7 +74,12 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public Person update(PersonDTO person, Long id,String token) {
+    public Person patch(Map<String, Object> patch, Long id) {
+        return null;
+    }
+
+    @Override
+    public Person update(PersonDTO person, Long id) {
         UserDetailSecurity user = UserServices.athenticated();
         if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
             throw new AuthorizationException("Acesso negado");
@@ -85,11 +92,6 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         p = personMapper.updateEntity(p,person);
         p.setModifiedDate(LocalDate.now());
         return p;
-    }
-
-    @Override
-    public Person patch(Map<String, Object> patch, Long id,String token) {
-        return null;
     }
 
 }
