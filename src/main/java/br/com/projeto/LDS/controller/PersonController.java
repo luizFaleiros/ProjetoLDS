@@ -56,6 +56,7 @@ public class PersonController {
     }
 
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/list")
     public ResponseEntity<List<PersonResponse>> list() {
         return ResponseEntity.ok(personService.listAll()
@@ -64,6 +65,7 @@ public class PersonController {
                 .collect(Collectors.toList()));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<PersonResponse> update(@Valid @RequestBody PersonDTO personDTO,
                                          @PathVariable Long id,
