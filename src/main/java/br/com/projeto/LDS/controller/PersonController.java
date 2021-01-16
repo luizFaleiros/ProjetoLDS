@@ -31,6 +31,7 @@ public class PersonController {
 
     private final PersonMapper personMapper;
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @GetMapping("/get-by-id/{id}")
     public ResponseEntity<PersonResponse> getById(@PathVariable Long id) {
 
@@ -40,18 +41,19 @@ public class PersonController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save-all")
     public ResponseEntity<Void> saveAll(@RequestBody @Valid List<PersonDTO> personList) {
-        personService.saveAll(personList.stream().map(personMapper::toEntity).collect(Collectors.toList()));
-        return ResponseEntity.created(URI.create("Deu certo")).body(null);
+        return null;
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save")
-    public ResponseEntity<Void> save(@RequestBody @Valid  PersonDTO person) {
+    public ResponseEntity<Void> save(@RequestBody PersonDTO person) {
         personService.save(personMapper.toEntity(person));
+
         return ResponseEntity.created(URI.create("Deu_certo")).body(null);
     }
 
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/list")
     public ResponseEntity<List<PersonResponse>> list() {
         return ResponseEntity.ok(personService.listAll()
@@ -60,11 +62,12 @@ public class PersonController {
                 .collect(Collectors.toList()));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @PutMapping("/update/{id}")
     public ResponseEntity<PersonResponse> update(@Valid @RequestBody PersonDTO personDTO,
                                          @PathVariable Long id) {
 
-        return ResponseEntity.ok(personMapper.toResponse(personService.update(personDTO,id)));
+        return ResponseEntity.ok(personMapper.toResponse(personService.update(personMapper.toEntity(personDTO),id)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")

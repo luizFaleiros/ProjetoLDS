@@ -1,9 +1,8 @@
 package br.com.projeto.LDS.services;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
+import br.com.projeto.LDS.exceptions.FileException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Optional;
+import java.net.URISyntaxException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,32 +26,35 @@ public class S3Service {
 
     private Logger log = LoggerFactory.getLogger(S3Service.class);
 
-    public URI uploadFile(MultipartFile multipartFile) throws IOException {
+    public URI uploadFile(MultipartFile multipartFile) {
 
-        String fileName = multipartFile.getOriginalFilename();
-        InputStream is = Optional.of(multipartFile.getInputStream()).orElseThrow(IOException::new);
-        String contentType = multipartFile.getContentType();
-        log.info("Iniciando o upload");
-        return uploadFile(is, fileName, contentType);
-
-    }
-
-    public URI uploadFile(InputStream is, String fileName, String contentyType) {
         try {
             String fileName = multipartFile.getOriginalFilename();
             InputStream is = multipartFile.getInputStream();
             String contentType = multipartFile.getContentType();
-
-            File file = new File(localFilePath);
             log.info("Iniciando o upload");
-            s3Client.putObject(new PutObjectRequest(bucketName, "teste", file));
-        } catch (AmazonServiceException e) {
-            log.info("AmazonServiceException: " + e.getErrorMessage());
-            log.info("AmazonServiceException: " + e.getErrorCode());
-        } catch (AmazonClientException e) {
-            log.info("AmazonClientException: " + e.getMessage());
+            URI uri =  uploadFile(is, fileName, contentType);
+            log.info("Terminando o upload");
+            return uri;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new FileException("Erro ao tentar fazer upload");
         }
+
+
+    }
+
+    public URI uploadFile(InputStream is, String fileName, String contentyType) {
+
+        try {
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(contentyType);
+            s3Client.putObject(bucketName, fileName, is, metadata);
+
+
+            return s3Client.getUrl(bucketName, fileName).toURI();
+        } catch (URISyntaxException e) {
+            throw new FileException("Erro ao tentar fazer upload");
+        }
+
     }
 }

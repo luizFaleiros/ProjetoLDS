@@ -3,39 +3,40 @@ package br.com.projeto.LDS.services;
 import br.com.projeto.LDS.config.security.UserDetailSecurity;
 import br.com.projeto.LDS.domains.DTO.TCCDTO;
 import br.com.projeto.LDS.domains.DTO.filter.params.TccFilter;
+import br.com.projeto.LDS.domains.entities.AcceptedFile;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Professor;
 import br.com.projeto.LDS.domains.entities.Studant;
 import br.com.projeto.LDS.domains.entities.TCC;
-import br.com.projeto.LDS.domains.mappers.PersonMapper;
 import br.com.projeto.LDS.domains.mappers.TccMapper;
+import br.com.projeto.LDS.enums.AcceptedFileTipeEnum;
 import br.com.projeto.LDS.enums.PerfilEnum;
 import br.com.projeto.LDS.exceptions.AuthorizationException;
 import br.com.projeto.LDS.exceptions.NotContentException;
-import br.com.projeto.LDS.repositories.PersonRepository;
+import br.com.projeto.LDS.exceptions.NotFoundException;
 import br.com.projeto.LDS.repositories.TccRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
 public class TccService {
     private final TccRepository tccRepository;
     private final PersonService personService;
-    private final PersonRepository personRepository;
-    private final PersonMapper personMapper;
     private final TccMapper tccMapper;
+    private final FileService fileService;
 
 
     public Page<TCC> getAllByProfessor(TccFilter filter) {
@@ -91,4 +92,19 @@ public class TccService {
         personService.saveAllStudants(studants);
 
     }
+    public URI uploadTccFile(MultipartFile multipartFile, Long id) {
+        UserDetailSecurity user = UserServices.athenticated();
+        Optional.ofNullable(user).orElseThrow(() -> new AuthorizationException("Acesso negado"));
+        TCC tcc = findById(id);
+        AcceptedFile file = fileService.saveFile(multipartFile, tcc);
+        return  URI.create(file.getUrl());
+    }
+
+    private TCC findById(Long id) {
+        UserDetailSecurity user = UserServices.athenticated();
+        Optional.ofNullable(user).orElseThrow(() -> new AuthorizationException("Acesso negado"));
+        return tccRepository.findById(id). orElseThrow(() -> new NotFoundException("TCC não encontrado"));
+    }
+
+
 }

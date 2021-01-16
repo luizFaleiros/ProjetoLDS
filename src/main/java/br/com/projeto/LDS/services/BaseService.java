@@ -12,11 +12,11 @@ public interface BaseService<ENTITY extends BaseEntity, DTO> {
 
     ENTITY getById(Long id);
 
-    void saveAll(List<ENTITY> personList);
+    void saveAll(List<ENTITY> dtos,String token);
 
     void save(ENTITY person);
 
-    ENTITY update(DTO person, Long id);
+    ENTITY update(ENTITY dto, Long id);
 
     ENTITY patch(Map<String, Object> patch, Long id);
 

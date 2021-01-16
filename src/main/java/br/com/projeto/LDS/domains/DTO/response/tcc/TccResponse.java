@@ -21,4 +21,7 @@ public class TccResponse {
 
     @JsonManagedReference
     List<PersonTccResponse> studants;
+
+    @JsonManagedReference
+    List<FilesResponse> files;
 }

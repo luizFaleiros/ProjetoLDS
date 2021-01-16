@@ -23,6 +23,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class PersonService implements BaseService<Person, PersonDTO> {
+
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -45,12 +46,14 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public void saveAll(List<Person> personList) {
+    public void saveAll(List<Person> dtos, String token) {
 
     }
 
+
     @Override
     public void save(Person person) {
+
         UserDetailSecurity user = UserServices.athenticated();
         if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
             throw new AuthorizationException("Acesso negado");
@@ -67,19 +70,19 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         person.setPass(passwordEncoder.encode(person.getPass()));
     }
 
+
     @Override
-    public Person update(PersonDTO person, Long id) {
+    public Person update(Person person, Long id) {
         UserDetailSecurity user = UserServices.athenticated();
         if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
             throw new AuthorizationException("Acesso negado");
         }
         Person p = getById(id);
-        Person entity = personMapper.toEntity(person);
         p.setModifiedBy(user.getUsername());
         p.setCpf(person.getCpf());
         p.setLastName(person.getLastName());
-        p.setName(person.getFirstName());
-        p = personMapper.updateEntity(p,entity);
+        p.setName(person.getName());
+        p = personMapper.updateEntity(p,person);
         p.setModifiedDate(LocalDate.now());
         return p;
     }
@@ -96,4 +99,5 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     public List<Studant> saveAllStudants(List<Studant> studants) {
         return personRepository.saveAll(studants);
     }
+
 }
