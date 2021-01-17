@@ -4,6 +4,7 @@ import br.com.projeto.LDS.config.security.UserDetailSecurity;
 import br.com.projeto.LDS.domains.DTO.TCCDTO;
 import br.com.projeto.LDS.domains.DTO.filter.params.TccFilter;
 import br.com.projeto.LDS.domains.entities.AcceptedFile;
+import br.com.projeto.LDS.domains.entities.BaseEntity;
 import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Professor;
 import br.com.projeto.LDS.domains.entities.Studant;
@@ -96,6 +97,10 @@ public class TccService {
         UserDetailSecurity user = UserServices.athenticated();
         Optional.ofNullable(user).orElseThrow(() -> new AuthorizationException("Acesso negado"));
         TCC tcc = findById(id);
+        Long studantId = tcc.getStudants().stream().filter(studant -> studant.getId() == id).findAny().map(BaseEntity::getId).orElse(null);
+        if(!tcc.getProfessor().getId().equals(id) && !studantId.equals(id)){
+            throw new NotFoundException("Tcc não pertence a essa pessoa");
+        }
         AcceptedFile file = fileService.saveFile(multipartFile, tcc);
         return  URI.create(file.getUrl());
     }
