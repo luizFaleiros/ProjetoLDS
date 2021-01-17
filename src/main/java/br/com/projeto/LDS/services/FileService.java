@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,10 +38,10 @@ public class FileService {
     }
 
     public AcceptedFile saveFile(MultipartFile multipartFile, TCC tcc) {
-
         UserDetailSecurity user = UserServices.athenticated();
         Optional.ofNullable(user).orElseThrow(() -> new AuthorizationException("Acesso negado"));
-        AcceptedFile file = uploadFile(multipartFile);
+
+        AcceptedFile file = uploadFile(multipartFile, user.getId());
         LocalDate today = LocalDate.now();
         file.setTcc(tcc);
         file.setCreatedDate(today);
@@ -50,12 +51,13 @@ public class FileService {
 
     }
 
-    public AcceptedFile uploadFile(MultipartFile multipartFile) {
+    public AcceptedFile uploadFile(MultipartFile multipartFile, Long id) {
 
         try {
 
             AcceptedFileTipeEnum acceptedFileTipe = getExtensionName(multipartFile);
-            String fileName = multipartFile.getName()+"-"+LocalDate.now().toString()+"."+acceptedFileTipe.getDescription().toLowerCase();
+            String fileName = LocalDateTime.now()+"-"+id+"-"+multipartFile.getOriginalFilename();
+
             InputStream is = multipartFile.getInputStream();
             String contentType = multipartFile.getContentType();
             URI uri = s3Service.uploadFile(is, fileName, contentType);
