@@ -1,6 +1,7 @@
 package br.com.projeto.LDS.services;
 
 import br.com.projeto.LDS.domains.entities.BaseEntity;
+import br.com.projeto.LDS.domains.entities.Studant;
 
 import java.util.List;
 import java.util.Map;
@@ -11,11 +12,11 @@ public interface BaseService<ENTITY extends BaseEntity, DTO> {
 
     ENTITY getById(Long id);
 
-    void saveAll(List<DTO> dtos,String token);
+    void saveAll(List<ENTITY> dtos,String token);
 
-    void save(DTO person);
+    void save(ENTITY person);
 
-    ENTITY update(DTO dto, Long id);
+    ENTITY update(ENTITY dto, Long id);
 
     ENTITY patch(Map<String, Object> patch, Long id);
 

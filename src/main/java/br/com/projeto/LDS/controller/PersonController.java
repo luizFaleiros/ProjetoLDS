@@ -1,8 +1,7 @@
 package br.com.projeto.LDS.controller;
 
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
-import br.com.projeto.LDS.domains.DTO.response.PersonResponse;
-import br.com.projeto.LDS.domains.entities.Person;
+import br.com.projeto.LDS.domains.DTO.response.person.PersonResponse;
 import br.com.projeto.LDS.domains.mappers.PersonMapper;
 import br.com.projeto.LDS.services.PersonService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,11 +38,17 @@ public class PersonController {
         return ResponseEntity.ok(personMapper.toResponse(personService.getById(id)));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping("/save-all")
+    public ResponseEntity<Void> saveAll(@RequestBody @Valid List<PersonDTO> personList) {
+        return null;
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save")
     public ResponseEntity<Void> save(@RequestBody PersonDTO person) {
-        personService.save(person);
+        personService.save(personMapper.toEntity(person));
+
         return ResponseEntity.created(URI.create("Deu_certo")).body(null);
     }
 
@@ -63,7 +67,7 @@ public class PersonController {
     public ResponseEntity<PersonResponse> update(@Valid @RequestBody PersonDTO personDTO,
                                          @PathVariable Long id) {
 
-        return ResponseEntity.ok(personMapper.toResponse(personService.update(personDTO,id)));
+        return ResponseEntity.ok(personMapper.toResponse(personService.update(personMapper.toEntity(personDTO),id)));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")

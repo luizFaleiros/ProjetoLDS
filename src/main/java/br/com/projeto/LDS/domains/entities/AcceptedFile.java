@@ -1,7 +1,7 @@
 package br.com.projeto.LDS.domains.entities;
 
+import br.com.projeto.LDS.enums.AcceptedFileTipeEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,31 +11,36 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import java.io.Serializable;
+import java.net.URI;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "STUDANT")
+@Table(name = "FILE")
 @ToString
-@Getter
-@Setter
 @SuperBuilder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@PrimaryKeyJoinColumn(name="PK_STUDANT_PERSON", referencedColumnName="ID")
-public class Studant  extends Person implements Serializable {
+@Getter
+@Setter
+public class AcceptedFile extends BaseEntity{
 
-    private String code;
+    @Column(name = "FILE_NAME")
+    private String fileName;
+
+    @Column(name = "FILE_TYPE")
+    private AcceptedFileTipeEnum fileType;
+
+    @Column(name = "URI")
+    private String url;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "PK_STUDANT_TCC")
+    @JoinColumn(name = "TCC_ID")
     private TCC tcc;
-
 }

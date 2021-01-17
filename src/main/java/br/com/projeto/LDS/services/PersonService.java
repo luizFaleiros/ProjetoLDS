@@ -1,19 +1,18 @@
 package br.com.projeto.LDS.services;
 
 import br.com.projeto.LDS.config.security.UserDetailSecurity;
-import br.com.projeto.LDS.config.security.jwt.JwtUtil;
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
 import br.com.projeto.LDS.domains.entities.Person;
+import br.com.projeto.LDS.domains.entities.Studant;
 import br.com.projeto.LDS.domains.mappers.PersonMapper;
 import br.com.projeto.LDS.enums.PerfilEnum;
+import br.com.projeto.LDS.enums.PersonTypeEnum;
 import br.com.projeto.LDS.exceptions.AuthorizationException;
 import br.com.projeto.LDS.exceptions.DuplicateException;
 import br.com.projeto.LDS.exceptions.NotFoundException;
 import br.com.projeto.LDS.repositories.PersonRepository;
-import javassist.bytecode.DuplicateMemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,6 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
 
 
     @Override
@@ -48,38 +46,33 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     }
 
     @Override
-    public void saveAll(List<PersonDTO> personDTOS, String token) {
+    public void saveAll(List<Person> dtos, String token) {
 
     }
 
 
     @Override
-    public void save(PersonDTO person) {
+    public void save(Person person) {
+
         UserDetailSecurity user = UserServices.athenticated();
         if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
             throw new AuthorizationException("Acesso negado");
         }
-        Person p;
-        p = personMapper.toEntity(person);
-        p.setModifiedBy(user.getUsername());
-        p.setCreatedDate(LocalDate.now());
-        p.setModifiedDate(LocalDate.now());
-        p.setPass(passwordEncoder.encode(p.getPass()));
+        person.setModifiedBy(user.getUsername());
+        person.setCreatedDate(LocalDate.now());
+        person.setModifiedDate(LocalDate.now());
+        person.setPass(passwordEncoder.encode(person.getPass()));
         try {
-            personRepository.saveAndFlush(p);
+            personRepository.save(person);
         }catch (DataIntegrityViolationException e ){
             throw new DuplicateException("Cadastro duplicado");
         }
-        p.setPass(passwordEncoder.encode(person.getPassword()));
+        person.setPass(passwordEncoder.encode(person.getPass()));
     }
 
-    @Override
-    public Person patch(Map<String, Object> patch, Long id) {
-        return null;
-    }
 
     @Override
-    public Person update(PersonDTO person, Long id) {
+    public Person update(Person person, Long id) {
         UserDetailSecurity user = UserServices.athenticated();
         if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
             throw new AuthorizationException("Acesso negado");
@@ -88,10 +81,23 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         p.setModifiedBy(user.getUsername());
         p.setCpf(person.getCpf());
         p.setLastName(person.getLastName());
-        p.setName(person.getFirstName());
+        p.setName(person.getName());
         p = personMapper.updateEntity(p,person);
         p.setModifiedDate(LocalDate.now());
         return p;
+    }
+
+    @Override
+    public Person patch(Map<String, Object> patch, Long id) {
+        return null;
+    }
+
+    public List<Studant> getAllStudantsIn(List<Long> studants) {
+        return personRepository.findByIdInAndPersonType(studants, PersonTypeEnum.STUDANT);
+    }
+
+    public List<Studant> saveAllStudants(List<Studant> studants) {
+        return personRepository.saveAll(studants);
     }
 
 }
