@@ -32,6 +32,7 @@ public class TccMapper {
 
     private FilesResponse toFileResponse(AcceptedFile acceptedFile) {
         return FilesResponse.builder()
+                .id(acceptedFile.getId())
                 .TccName(acceptedFile.getFileName())
                 .fileTipe(acceptedFile.getFileType())
                 .url(URI.create(acceptedFile.getUrl()))

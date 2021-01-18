@@ -20,4 +20,6 @@ public interface BaseService<ENTITY extends BaseEntity, DTO> {
 
     ENTITY patch(Map<String, Object> patch, Long id);
 
+    void logicalDelete(Long id);
+
 }

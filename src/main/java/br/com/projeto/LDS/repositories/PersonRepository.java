@@ -4,6 +4,7 @@ import br.com.projeto.LDS.domains.entities.Person;
 import br.com.projeto.LDS.domains.entities.Studant;
 import br.com.projeto.LDS.enums.PersonTypeEnum;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +16,7 @@ public interface PersonRepository extends BaseRepository<Person, Long>, JpaSpeci
     Optional<Person> findByEmail(String email);
 
     List<Studant> findByIdInAndPersonType(List<Long> id, PersonTypeEnum personTypeEnum);
+
+    Optional<Person> findByIdAndIsDeleted(Long id, Boolean deleted);
+
 }

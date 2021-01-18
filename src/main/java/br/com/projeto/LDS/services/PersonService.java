@@ -42,7 +42,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         if(user == null || !user.hasRole(PerfilEnum.ADMIN) && !id.equals(user.getId())){
             throw new AuthorizationException("Acesso negado");
         }
-        return personRepository.findById(id).orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
+        return personRepository.findByIdAndIsDeleted(id,false).orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
     }
 
     @Override
@@ -95,9 +95,24 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     public List<Studant> getAllStudantsIn(List<Long> studants) {
         return personRepository.findByIdInAndPersonType(studants, PersonTypeEnum.STUDANT);
     }
-
     public List<Studant> saveAllStudants(List<Studant> studants) {
         return personRepository.saveAll(studants);
+    }
+
+
+    @Override
+    public void logicalDelete(Long id) {
+
+        UserDetailSecurity user = UserServices.athenticated();
+
+        if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
+            throw new AuthorizationException("Acesso negado");
+        }
+
+        Person person = getById(id);
+        person.setIsDeleted(true);
+
+        personRepository.save(person);
     }
 
 }

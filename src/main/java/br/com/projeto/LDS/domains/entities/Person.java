@@ -51,6 +51,9 @@ public abstract class Person extends BaseEntity implements Serializable {
     @Column(name = "PASSWORD", nullable = false)
     private String pass;
 
+    @Column(name = "ISDELETED", nullable = false)
+    private Boolean isDeleted = false;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "PERFIL")
     private Set<PerfilEnum> perfis = new HashSet<>();

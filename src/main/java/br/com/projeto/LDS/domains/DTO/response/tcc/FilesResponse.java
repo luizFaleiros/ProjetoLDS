@@ -18,6 +18,7 @@ import java.time.LocalDate;
 @Builder
 public class FilesResponse {
 
+    private Long id;
     private String TccName;
     private AcceptedFileTipeEnum fileTipe;
     private URI url;

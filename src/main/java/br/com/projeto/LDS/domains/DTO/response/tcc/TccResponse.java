@@ -15,13 +15,15 @@ import java.util.List;
 @Builder
 public class TccResponse {
 
-    String name;
+    private Long id;
 
-    String subject;
+    private String name;
+
+    private String subject;
 
     @JsonManagedReference
-    List<PersonTccResponse> studants;
+    private List<PersonTccResponse> studants;
 
     @JsonManagedReference
-    List<FilesResponse> files;
+    private List<FilesResponse> files;
 }
