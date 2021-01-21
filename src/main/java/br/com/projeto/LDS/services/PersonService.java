@@ -78,6 +78,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         person.setModifiedBy(user.getUsername());
         person.setCreatedDate(LocalDate.now());
         person.setModifiedDate(LocalDate.now());
+        person.setIsDeleted(Boolean.FALSE);
         person.setPass(passwordEncoder.encode(person.getPass()));
         try {
             personRepository.save(person);
