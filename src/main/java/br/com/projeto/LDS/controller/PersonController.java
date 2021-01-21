@@ -3,6 +3,7 @@ package br.com.projeto.LDS.controller;
 import br.com.projeto.LDS.domains.DTO.PersonDTO;
 import br.com.projeto.LDS.domains.DTO.response.person.PersonResponse;
 import br.com.projeto.LDS.domains.mappers.PersonMapper;
+import br.com.projeto.LDS.enums.PersonTypeEnum;
 import br.com.projeto.LDS.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -56,8 +58,8 @@ public class PersonController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<List<PersonResponse>> list() {
-        return ResponseEntity.ok(personService.listAll()
+    public ResponseEntity<List<PersonResponse>> list(@RequestParam(name = "person-type", required = false) PersonTypeEnum personType) {
+        return ResponseEntity.ok(personService.listAll(personType)
                 .stream()
                 .map(personMapper::toResponse)
                 .collect(Collectors.toList()));

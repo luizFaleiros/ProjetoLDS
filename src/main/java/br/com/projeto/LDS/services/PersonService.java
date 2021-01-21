@@ -11,8 +11,10 @@ import br.com.projeto.LDS.exceptions.AuthorizationException;
 import br.com.projeto.LDS.exceptions.DuplicateException;
 import br.com.projeto.LDS.exceptions.NotFoundException;
 import br.com.projeto.LDS.repositories.PersonRepository;
+import br.com.projeto.LDS.repositories.specifications.PersonSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,20 +31,35 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     private final BCryptPasswordEncoder passwordEncoder;
 
 
+
+    public List<Person> listAll(PersonTypeEnum personType) {
+        UserDetailSecurity user = UserServices.athenticated();
+
+        if (user == null || !user.hasRole(PerfilEnum.ADMIN)) {
+            throw new AuthorizationException("Acesso negado");
+        }
+
+        return personRepository.findAll(Specification.where(PersonSpecification.personType(personType)));
+    }
+
     @Override
     public List<Person> listAll() {
-        List<Person> personList = personRepository.findAll();
-        return personList ;
+        UserDetailSecurity user = UserServices.athenticated();
+
+        if (user == null || !user.hasRole(PerfilEnum.ADMIN)) {
+            throw new AuthorizationException("Acesso negado");
+        }
+        return personRepository.findAll();
     }
 
     @Override
     public Person getById(Long id) {
 
         UserDetailSecurity user = UserServices.athenticated();
-        if(user == null || !user.hasRole(PerfilEnum.ADMIN) && !id.equals(user.getId())){
+        if (user == null || !user.hasRole(PerfilEnum.ADMIN) && !id.equals(user.getId())) {
             throw new AuthorizationException("Acesso negado");
         }
-        return personRepository.findByIdAndIsDeleted(id,false).orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
+        return personRepository.findByIdAndIsDeleted(id, false).orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
     }
 
     @Override
@@ -55,7 +72,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     public void save(Person person) {
 
         UserDetailSecurity user = UserServices.athenticated();
-        if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
+        if (user == null && !user.hasRole(PerfilEnum.ADMIN)) {
             throw new AuthorizationException("Acesso negado");
         }
         person.setModifiedBy(user.getUsername());
@@ -64,7 +81,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         person.setPass(passwordEncoder.encode(person.getPass()));
         try {
             personRepository.save(person);
-        }catch (DataIntegrityViolationException e ){
+        } catch (DataIntegrityViolationException e) {
             throw new DuplicateException("Cadastro duplicado");
         }
         person.setPass(passwordEncoder.encode(person.getPass()));
@@ -74,7 +91,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     @Override
     public Person update(Person person, Long id) {
         UserDetailSecurity user = UserServices.athenticated();
-        if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
+        if (user == null && !user.hasRole(PerfilEnum.ADMIN)) {
             throw new AuthorizationException("Acesso negado");
         }
         Person p = getById(id);
@@ -82,7 +99,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         p.setCpf(person.getCpf());
         p.setLastName(person.getLastName());
         p.setName(person.getName());
-        p = personMapper.updateEntity(p,person);
+        p = personMapper.updateEntity(p, person);
         p.setModifiedDate(LocalDate.now());
         return p;
     }
@@ -95,6 +112,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
     public List<Studant> getAllStudantsIn(List<Long> studants) {
         return personRepository.findByIdInAndPersonType(studants, PersonTypeEnum.STUDANT);
     }
+
     public List<Studant> saveAllStudants(List<Studant> studants) {
         return personRepository.saveAll(studants);
     }
@@ -105,7 +123,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
 
         UserDetailSecurity user = UserServices.athenticated();
 
-        if(user == null && !user.hasRole(PerfilEnum.ADMIN)){
+        if (user == null && !user.hasRole(PerfilEnum.ADMIN)) {
             throw new AuthorizationException("Acesso negado");
         }
 

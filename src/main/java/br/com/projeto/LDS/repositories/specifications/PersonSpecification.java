@@ -1,19 +1,15 @@
 package br.com.projeto.LDS.repositories.specifications;
 
+import br.com.projeto.LDS.domains.entities.Person;
+import br.com.projeto.LDS.enums.PersonTypeEnum;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-public class PersonSpecification implements Specification {
+public class PersonSpecification {
 
 
-    @Override
-    public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
-        return null;
+    public static  Specification<Person> personType(PersonTypeEnum personTypeEnum){
+        return (root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("personType"), personTypeEnum);
     }
-
 
 }
