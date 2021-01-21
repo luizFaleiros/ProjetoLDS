@@ -39,7 +39,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
             throw new AuthorizationException("Acesso negado");
         }
 
-        return personRepository.findAll(Specification.where(PersonSpecification.personType(personType)));
+        return personRepository.findAll(Specification.where(PersonSpecification.personType(personType)).and(PersonSpecification.deleted(false)));
     }
 
     @Override
