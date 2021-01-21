@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
@@ -13,10 +14,13 @@ import java.util.List;
 @Data
 @Builder
 public class TCCDTO {
-    @NotEmpty
+    @Valid
+    @NotEmpty(message = "Nome do TCC é obrigatorio")
     String name;
 
-    @NotEmpty
+    @Valid
+    @NotEmpty(message = "subject do tcc é obrigatório")
     String subjects;
+
     List<Long> studants;
 }

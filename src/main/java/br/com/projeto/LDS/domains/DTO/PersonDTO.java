@@ -26,11 +26,11 @@ public abstract class PersonDTO {
     }
 
     @Valid
-    @NotBlank
+    @NotBlank(message = "Ultimo nome não pode ser vazio")
     private String lastName;
 
     @Valid
-    @NotBlank
+    @NotBlank(message = "Primeairo nome não pode ser vazio")
     private String firstName;
 
     @Valid
@@ -39,15 +39,15 @@ public abstract class PersonDTO {
     private String cpf;
 
     @Valid
-    @NotBlank
+    @NotBlank(message = "Tipo de pessoa não pode vir vazio")
     private PersonTypeEnum personType;
 
     @Valid
-    @NotBlank
+    @NotBlank(message = "Senha não pode vir vazia")
     private String password;
 
     @Valid
-    @NotBlank
+    @NotBlank(message = "Email não pode ser vazio")
     private String email;
 
 }
