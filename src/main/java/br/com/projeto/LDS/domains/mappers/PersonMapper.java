@@ -134,6 +134,7 @@ public class PersonMapper {
                         .personType(entity.getPersonType())
                         .lastName(entity.getLastName())
                         .email(entity.getEmail())
+                        .cpf(entity.getCpf())
                         .tccs(entity.getTcc().stream().map(this::toTcc).collect(Collectors.toList()))
                         .build()).orElse(null);
     }
@@ -155,6 +156,7 @@ public class PersonMapper {
                 .firstName(entity.getName())
                 .lastName(entity.getLastName())
                 .code(entity.getCode())
+                .cpf(entity.getCpf())
                 .email(entity.getEmail())
                 .personType(entity.getPersonType())
                 .build();

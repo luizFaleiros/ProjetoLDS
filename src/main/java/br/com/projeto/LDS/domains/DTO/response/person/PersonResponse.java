@@ -26,6 +26,8 @@ public class PersonResponse {
 
     private PersonTypeEnum personType;
 
+    private String cpf;
+
     private String email;
 
 }

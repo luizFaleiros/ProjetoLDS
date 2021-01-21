@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @EqualsAndHashCode(callSuper = true)
@@ -25,6 +26,7 @@ public class StudantDTO extends PersonDTO {
     @NotNull
     private TCC tcc;
 
+    @Valid
     @NotNull
     private String code;
 }
