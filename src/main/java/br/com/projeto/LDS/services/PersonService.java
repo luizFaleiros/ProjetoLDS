@@ -102,7 +102,7 @@ public class PersonService implements BaseService<Person, PersonDTO> {
         p.setName(person.getName());
         p = personMapper.updateEntity(p, person);
         p.setModifiedDate(LocalDate.now());
-        return p;
+        return personRepository.save(p);
     }
 
     @Override

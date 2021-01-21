@@ -154,6 +154,8 @@ public class PersonMapper {
                 .tcc(toTcc(entity.getTcc()))
                 .firstName(entity.getName())
                 .lastName(entity.getLastName())
+                .code(entity.getCode())
+                .email(entity.getEmail())
                 .personType(entity.getPersonType())
                 .build();
     }
