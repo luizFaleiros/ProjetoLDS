@@ -39,7 +39,7 @@ import java.util.Set;
 public class Professor extends Person implements Serializable {
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "professor", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "professor")
     private List<TCC> tcc;
 
 }
