@@ -24,7 +24,6 @@ public class StudantDTO extends PersonDTO {
         super(PersonTypeEnum.STUDANT);
     }
 
-    @NotNull
     private TCC tcc;
 
     @Valid

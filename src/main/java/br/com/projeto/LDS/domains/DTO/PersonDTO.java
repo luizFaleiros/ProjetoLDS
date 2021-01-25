@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,6 +21,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
+@Validated
 public abstract class PersonDTO {
 
     public PersonDTO(PersonTypeEnum personType) {
@@ -39,7 +42,7 @@ public abstract class PersonDTO {
     private String cpf;
 
     @Valid
-    @NotBlank(message = "Tipo de pessoa não pode vir vazio")
+    @NotNull(message = "Tipo de pessoa não pode vir vazio")
     private PersonTypeEnum personType;
 
     @Valid
@@ -48,6 +51,7 @@ public abstract class PersonDTO {
 
     @Valid
     @NotBlank(message = "Email não pode ser vazio")
+    @Email(message = "Essa string não é um email valido")
     private String email;
 
 }

@@ -8,6 +8,7 @@ import br.com.projeto.LDS.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -43,13 +44,13 @@ public class PersonController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save-all")
-    public ResponseEntity<Void> saveAll(@RequestBody @Valid List<PersonDTO> personList) {
+    public ResponseEntity<Void> saveAll(@Validated @RequestBody List<PersonDTO> personList) {
         return null;
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/save")
-    public ResponseEntity<Void> save(@RequestBody PersonDTO person) {
+    public ResponseEntity<Void> save(@Validated @RequestBody PersonDTO person) {
         personService.save(personMapper.toEntity(person));
 
         return ResponseEntity.created(URI.create("Deu_certo")).body(null);
@@ -67,7 +68,7 @@ public class PersonController {
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @PutMapping("/update/{id}")
-    public ResponseEntity<PersonResponse> update(@Valid @RequestBody PersonDTO personDTO,
+    public ResponseEntity<PersonResponse> update(@Validated @RequestBody PersonDTO personDTO,
                                          @PathVariable Long id) {
 
         return ResponseEntity.ok(personMapper.toResponse(personService.update(personMapper.toEntity(personDTO),id)));
@@ -75,7 +76,7 @@ public class PersonController {
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<PersonResponse> update(@Valid @RequestBody Map<String, Object> personDTO,
+    public ResponseEntity<PersonResponse> update(@Validated @RequestBody Map<String, Object> personDTO,
                                          @PathVariable Long id) {
 
         return ResponseEntity.ok(personMapper.toResponse(personService.patch(personDTO,id)));

@@ -1,16 +1,23 @@
 package br.com.projeto.LDS.config.security.jwt;
 
 
+import br.com.projeto.LDS.enums.PerfilEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
@@ -21,10 +28,11 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(String username) {
+    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
         return Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setClaims(addClaims(authorities))
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes())
                 .compact();
     }
@@ -60,5 +68,11 @@ public class JwtUtil {
             username = claims.getSubject();
         }
         return username;
+    }
+
+    private Map<String, Object> addClaims(Collection<? extends GrantedAuthority> authorities){
+            Map<String, Object> auths = new HashMap<>();
+            auths.put("Roles", authorities.stream().map(authorit -> authorit.getAuthority()).collect(Collectors.toList()));
+        return  auths;
     }
 }

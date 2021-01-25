@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -21,7 +23,6 @@ public class ProfessorDTO extends PersonDTO {
     public ProfessorDTO() {
         super(PersonTypeEnum.PROFESSOR);
     }
-
 
     private List<TCC> tccs;
 }
