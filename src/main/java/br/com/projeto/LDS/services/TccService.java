@@ -97,18 +97,19 @@ public class TccService {
         UserDetailSecurity user = UserServices.athenticated();
         Optional.ofNullable(user).orElseThrow(() -> new AuthorizationException("Acesso negado"));
         TCC tcc = findById(id);
-        Long studantId = tcc.getStudants().stream().filter(studant -> studant.getId() == id).findAny().map(BaseEntity::getId).orElse(null);
-        if(!tcc.getProfessor().getId().equals(id) && !studantId.equals(id)){
-            throw new NotFoundException("Tcc não pertence a essa pessoa");
-        }
         AcceptedFile file = fileService.saveFile(multipartFile, tcc);
         return  URI.create(file.getUrl());
     }
 
-    private TCC findById(Long id) {
+    public TCC findById(Long id) {
         UserDetailSecurity user = UserServices.athenticated();
         Optional.ofNullable(user).orElseThrow(() -> new AuthorizationException("Acesso negado"));
-        return tccRepository.findById(id). orElseThrow(() -> new NotFoundException("TCC não encontrado"));
+        TCC tcc = tccRepository.findById(id). orElseThrow(() -> new NotFoundException("TCC não encontrado"));
+        Long studantId = tcc.getStudants().stream().filter(studant -> studant.getId() == id).findAny().map(BaseEntity::getId).orElse(null);
+        if(!tcc.getProfessor().getId().equals(id) && !studantId.equals(id)){
+            throw new NotFoundException("Tcc não pertence a essa pessoa");
+        }
+        return tcc;
     }
 
 
