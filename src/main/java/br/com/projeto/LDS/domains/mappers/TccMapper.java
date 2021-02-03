@@ -23,6 +23,7 @@ public class TccMapper {
 
     public TccResponse toResponse(TCC entity) {
         return TccResponse.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .subject(entity.getSubjects())
                 .files(entity.getFiles().stream().map(this::toFileResponse).collect(Collectors.toList()))
