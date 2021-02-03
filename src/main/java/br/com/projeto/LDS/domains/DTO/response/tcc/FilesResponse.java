@@ -1,6 +1,7 @@
 package br.com.projeto.LDS.domains.DTO.response.tcc;
 
 import br.com.projeto.LDS.enums.AcceptedFileTipeEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,6 @@ public class FilesResponse {
 
     private String whoModified;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate lastModified;
 }
