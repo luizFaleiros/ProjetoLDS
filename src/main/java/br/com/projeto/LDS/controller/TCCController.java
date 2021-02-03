@@ -53,7 +53,7 @@ public class TCCController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR','STUDANT')")
-    @PutMapping("/detail/{tccId}")
+    @GetMapping("/detail/{tccId}")
     ResponseEntity<TccResponse> tccDetais(@PathVariable Long tccId) {
         return ResponseEntity.ok(tccMapper.toResponse(tccService.findById(tccId)));
     }
